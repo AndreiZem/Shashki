@@ -21,7 +21,6 @@ Doska nDoska(Doska Aa, int a, int b, int c)
 
 }
 
-
 Doska sDoska(Doska Aa)
 {
     for (int i= 0; i<32; i++)
@@ -29,10 +28,7 @@ Doska sDoska(Doska Aa)
     else if(Aa.pole[i]==100) Aa.pole[i]=0;
 
     return (Aa);
-
 }
-
-
 
 int ProverkaBelyh(Doska Zz)
 {
@@ -54,34 +50,20 @@ int ProverkaChernyh(Doska Zz)
 
 void Hod(Doska Aa, int a, int b)
 {
-
     int f = Aa.pole[a];
     Aa.pole[a] = 0;
     if (b<4) Aa.pole[b]=4;         // белая шашка превращается в дамку
     else if (b>27) Aa.pole[b]=3;   // черная шашка превращается в дамку
     else Aa.pole[b]=f;
-
-
- //   cout << "hod " << endl;
-  //   PrintDoska(sDoska(Aa));
     putFile(sDoska(Aa));
-
 }
 
 void HodD(Doska Aa, int a, int b)
 {
-    int f = Aa.pole[a];
+    Aa.pole[b] = Aa.pole[a];
     Aa.pole[a] = 0;
-    Aa.pole[b]=f;
-
-//    cout << "hod " << endl;
-//     PrintDoska(sDoska(Aa));
     putFile(sDoska(Aa));
-
 }
-
-
-
 
 int HodDamki(Doska Zz, int Damka)
 {
@@ -144,15 +126,21 @@ int fl=0;
         {
             if (Xx[i]<7)
             {
-                fl=1;
                 int z = YyXx[Yy[i]+1][Xx[i]+1];
-                if(Zz.pole[z]==0) Hod(Zz,i,z);
+                if(Zz.pole[z]==0) 
+                {
+                    fl=1;
+                    Hod(Zz,i,z);
+                }
             }
             if (Xx[i]>0)
             {
-                fl=1;
                 int z = YyXx[Yy[i]+1][Xx[i]-1];
-                if(Zz.pole[z]==0) Hod(Zz,i,z);
+                if(Zz.pole[z]==0) 
+                {
+                    fl=1;
+                    Hod(Zz,i,z);
+                }
             }
 
         }
@@ -161,7 +149,7 @@ int fl=0;
     return (fl|HodDamki(Zz,4));
 }
 
-int  HodChernyh(Doska Zz)
+int HodChernyh(Doska Zz)
 {
 int fl=0;
     for (int i= 0; i<28; i++)
@@ -193,8 +181,6 @@ int fl=0;
     return (fl|HodDamki(Zz,3));
 }
 
-
-
 int Proverka(Doska Zz, int St)
 {
 
@@ -212,7 +198,7 @@ int fl=0;
                 int zz = YyXx[Yy[i]+2][Xx[i]+2];
                 if(((Zz.pole[z]==sopsas)||(Zz.pole[z]==sopdam))&&(Zz.pole[zz]==0))
                 {
-                    fl=1;
+                  fl=1;
                   Proverka(nDoska(Zz,i,z,zz), St+1);
                 }
             }
@@ -223,7 +209,7 @@ int fl=0;
                 int zz = YyXx[Yy[i]+2][Xx[i]-2];
                 if(((Zz.pole[z]==sopsas)||(Zz.pole[z]==sopdam))&&(Zz.pole[zz]==0))
                 {
-                    fl=1;
+                  fl=1;
                   Proverka(nDoska(Zz,i,z,zz), St+1);
                 }
             }
@@ -235,7 +221,7 @@ int fl=0;
                 int zz = YyXx[Yy[i]-2][Xx[i]-2];
                 if(((Zz.pole[z]==sopsas)||(Zz.pole[z]==sopdam))&&(Zz.pole[zz]==0))
                 {
-                    fl=1;
+                  fl=1;
                   Proverka(nDoska(Zz,i,z,zz), St+1);
                 }
             }
@@ -244,7 +230,7 @@ int fl=0;
             {
                 int z = YyXx[Yy[i]-1][Xx[i]+1];
                 int zz = YyXx[Yy[i]-2][Xx[i]+2];
-                if(((Zz.pole[z]==1)||(Zz.pole[z]==sopdam))&&(Zz.pole[zz]==0))
+                if(((Zz.pole[z]==sopsas)||(Zz.pole[z]==sopdam))&&(Zz.pole[zz]==0))
                 {
                     fl=1;
                   Proverka(nDoska(Zz,i,z,zz), St+1);
@@ -346,19 +332,18 @@ int fl=0;
 
 
 
-  }
+      }
 
 
 
 
     }
 
-if ((St >0)&&(fl==0))
+if ((St >0)&&(fl==0))  // как минимум 1 раз побили и больше бить не надо
 {
-
     putFile(sDoska(Zz));
     return 1;
 }
-        return 0;
+  return fl;
 
 }
